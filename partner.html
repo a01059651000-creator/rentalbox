@@ -251,12 +251,14 @@
             <tr><th>사업자등록번호</th><td>361-15-02659</td></tr>
             <tr><th>주소</th><td>광주광역시 광산구 송정로 16번길 20 401호</td></tr>
             <tr><th>대표자</th><td>
-                <div class="hq-rep-wrap" style="display:flex;align-items:center;gap:10px">
+                <div style="display:flex;align-items:center;gap:8px">
                     <span style="font-weight:bold">이미진</span>
-                    <div style="border:1px dashed #bdc3c7;background:#fafafa;border-radius:4px;position:relative;width:150px;height:55px;flex-shrink:0;">
-                        <button type="button" onclick="clearRepSig()" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.05);border:none;font-size:9px;padding:1px 4px;cursor:pointer;color:#888;z-index:1">지우기</button>
-                        <canvas id="repSignaturePad" style="display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;"></canvas>
-                    </div>
+                    <svg width="120" height="48" viewBox="0 0 120 48" xmlns="http://www.w3.org/2000/svg" style="display:inline-block">
+                        <path d="M8,38 C12,20 18,14 22,18 C26,22 20,32 24,28 C28,24 32,12 36,16 C38,18 36,26 38,24" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M40,10 C40,28 42,36 44,32 C46,28 44,18 48,22 C52,26 50,34 54,30" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M56,16 C58,12 62,10 64,14 C66,18 64,28 68,24 C72,20 70,30 74,34 C76,36 78,34 80,30" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10,42 C30,44 60,44 90,40" stroke="#1a237e" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+                    </svg>
                 </div>
             </td></tr>
         </table>
@@ -356,34 +358,6 @@
     canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(!drawing) return; const {x,y}=getPos(e); ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.strokeStyle='#000'; ctx.lineTo(x,y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x,y); }, {passive:false});
     window.clearSig = () => { ctx.clearRect(0,0,canvas.width,canvas.height); window.hasSigned=false; };
 
-    // 대표자(이미진) 서명 캔버스
-    const repCanvas = document.getElementById('repSignaturePad');
-    const repCtx = repCanvas.getContext('2d');
-    let repDrawing = false;
-
-    function resizeRepCanvas() {
-        const d = repCanvas.toDataURL();
-        repCanvas.width = repCanvas.clientWidth || 150;
-        repCanvas.height = repCanvas.clientHeight || 55;
-        if (window.repHasSigned) { const img = new Image(); img.onload = () => repCtx.drawImage(img,0,0); img.src = d; }
-    }
-    window.addEventListener('load', resizeRepCanvas);
-    window.addEventListener('resize', () => setTimeout(resizeRepCanvas, 100));
-
-    function getRepPos(e) {
-        const rect = repCanvas.getBoundingClientRect();
-        const cx = e.touches ? e.touches[0].clientX : e.clientX;
-        const cy = e.touches ? e.touches[0].clientY : e.clientY;
-        return { x:(cx-rect.left)*(repCanvas.width/rect.width), y:(cy-rect.top)*(repCanvas.height/rect.height) };
-    }
-    repCanvas.addEventListener('mousedown', (e) => { repDrawing=true; window.repHasSigned=true; const p=getRepPos(e); repCtx.beginPath(); repCtx.moveTo(p.x,p.y); });
-    window.addEventListener('mouseup', () => { repDrawing=false; repCtx.beginPath(); });
-    repCanvas.addEventListener('mousemove', (e) => { if(!repDrawing) return; const {x,y}=getRepPos(e); repCtx.lineWidth=2.5; repCtx.lineCap='round'; repCtx.strokeStyle='#1a237e'; repCtx.lineTo(x,y); repCtx.stroke(); repCtx.beginPath(); repCtx.moveTo(x,y); });
-    repCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); repDrawing=true; window.repHasSigned=true; if(!repCanvas.width) resizeRepCanvas(); const p=getRepPos(e); repCtx.beginPath(); repCtx.moveTo(p.x,p.y); }, {passive:false});
-    repCanvas.addEventListener('touchend', () => { repDrawing=false; repCtx.beginPath(); });
-    repCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(!repDrawing) return; const {x,y}=getRepPos(e); repCtx.lineWidth=2.5; repCtx.lineCap='round'; repCtx.strokeStyle='#1a237e'; repCtx.lineTo(x,y); repCtx.stroke(); repCtx.beginPath(); repCtx.moveTo(x,y); }, {passive:false});
-    window.clearRepSig = () => { repCtx.clearRect(0,0,repCanvas.width,repCanvas.height); window.repHasSigned=false; };
-
     window.searchAddress = () => { new daum.Postcode({ oncomplete: (data) => { document.getElementById('postcode').value=data.zonecode; document.getElementById('roadAddress').value=data.address; document.getElementById('detailAddress').focus(); }}).open(); };
 
     window.partnerType = 'individual';
@@ -424,9 +398,14 @@
                 <tr><th>사업자등록번호</th><td>361-15-02659</td></tr>
                 <tr><th>주소</th><td>광주광역시 광산구 송정로 16번길 20 401호</td></tr>
                 <tr><th>대표자</th><td>
-                    <div style="display:flex;align-items:center;gap:10px">
+                    <div style="display:flex;align-items:center;gap:8px">
                         <strong>이미진</strong>
-                        ${window.repHasSigned ? `<img src="${document.getElementById('repSignaturePad').toDataURL()}" style="height:45px;border:1px solid #eee;border-radius:4px">` : ''}
+                        <svg width="120" height="48" viewBox="0 0 120 48" xmlns="http://www.w3.org/2000/svg" style="display:inline-block">
+                            <path d="M8,38 C12,20 18,14 22,18 C26,22 20,32 24,28 C28,24 32,12 36,16 C38,18 36,26 38,24" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M40,10 C40,28 42,36 44,32 C46,28 44,18 48,22 C52,26 50,34 54,30" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M56,16 C58,12 62,10 64,14 C66,18 64,28 68,24 C72,20 70,30 74,34 C76,36 78,34 80,30" stroke="#1a237e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10,42 C30,44 60,44 90,40" stroke="#1a237e" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+                        </svg>
                     </div>
                 </td></tr>
             </table>
