@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>파트너 매뉴얼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #e8004d;
+  --primary-dim: rgba(232,0,77,0.1);
+  --teal: #00b2b2;
+  --teal-dim: rgba(0,178,178,0.08);
+  --dark: #1a1d26;
+  --card: #ffffff;
+  --bg: #f4f6fb;
+  --border: #e8ecf4;
+  --text: #1a1d26;
+  --muted: #7a829a;
+  --header-h: 44px;
+  --tab-h: 44px;
+  --total-h: 88px;
+}
+html, body { height: 100%; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ══ 헤더 + 탭을 한 줄로 ══ */
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: var(--dark);
+  display: flex; flex-direction: column;
+}
+
+/* 헤더 라인 */
+.header-line {
+  height: var(--header-h);
+  display: flex; align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.hbadge {
+  background: var(--primary); color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+  flex-shrink: 0;
+}
+.htitle {
+  font-size: 14px; font-weight: 700; color: white;
+  margin-left: 8px;
+}
+
+/* 탭 라인 */
+.tab-line {
+  height: var(--tab-h);
+  display: flex;
+  overflow-x: auto; scrollbar-width: none;
+  padding: 0 6px;
+}
+.tab-line::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 14px;
+  font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,.4);
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer; transition: all .18s;
+  font-family: inherit;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.tab-btn:hover { color: rgba(255,255,255,.75); }
+.tab-btn.active { color: white; border-bottom-color: var(--primary); }
+.tab-soon {
+  font-size: 9px; font-weight: 700;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.35);
+  padding: 1px 5px; border-radius: 8px;
+}
+
+/* ══ 콘텐츠 영역 ══ */
+.page-wrap {
+  padding-top: var(--total-h);
+  min-height: 100vh;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ══ 공통 컨테이너 ══ */
+.wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 60px; }
+
+/* ══ 탭1: 홈 ══ */
+.home-hero {
+  background: linear-gradient(135deg, #1a1d26 0%, #2d1435 100%);
+  padding: 32px 20px 28px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.home-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(232,0,77,.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.home-hero h1 { font-size: 20px; font-weight: 900; color: white; line-height: 1.35; margin-bottom: 6px; position: relative; }
+.home-hero h1 em { color: var(--primary); font-style: normal; }
+.home-hero p { font-size: 12px; color: rgba(255,255,255,.5); position: relative; }
+
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+@media (max-width: 400px) { .menu-grid { grid-template-columns: 1fr; } }
+
+.menu-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer; transition: all .2s;
+  position: relative;
+}
+.menu-card:active { transform: scale(.98); }
+.menu-card:hover { border-color: var(--primary); box-shadow: 0 6px 18px rgba(0,0,0,.09); }
+.menu-card.soon { opacity: .5; cursor: default; }
+.menu-card.soon:hover { border-color: var(--border); box-shadow: none; }
+.mc-icon { font-size: 26px; }
+.mc-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.mc-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.mc-badge {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px; width: fit-content;
+}
+.badge-new { background: var(--primary-dim); color: var(--primary); }
+.badge-soon { background: #f3f4f6; color: #9ca3af; }
+
+.notice-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 12px; color: var(--muted); line-height: 1.65;
+}
+.notice-box strong { color: var(--text); }
+
+/* ══ 탭2: 렌탈사 추천 계산기 ══ */
+.calc-hero {
+  background: linear-gradient(135deg, #1a1d26 0%, #162040 100%);
+  padding: 24px 16px; text-align: center;
+}
+.calc-hero h2 { font-size: 18px; font-weight: 900; color: white; margin-bottom: 4px; }
+.calc-hero h2 em { color: var(--teal); font-style: normal; }
+.calc-hero p { font-size: 12px; color: rgba(255,255,255,.5); }
+
+.calc-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; margin-bottom: 14px;
+}
+.calc-label {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  letter-spacing: .5px; margin-bottom: 10px;
+}
+.calc-input-row { display: flex; gap: 10px; align-items: center; }
+.calc-input {
+  flex: 1; padding: 12px 14px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 16px; font-weight: 700;
+  color: var(--text); font-family: inherit;
+  transition: border-color .2s; outline: none;
+}
+.calc-input:focus { border-color: var(--primary); }
+.calc-unit { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+.score-hint {
+  font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.5;
+}
+.score-hint span { display: inline-block; margin-right: 10px; }
+
+.calc-btn {
+  width: 100%; padding: 14px;
+  background: var(--primary); color: white;
+  font-size: 15px; font-weight: 700;
+  border: none; border-radius: 12px;
+  cursor: pointer; font-family: inherit;
+  transition: all .2s; margin-top: 4px;
+}
+.calc-btn:hover { background: #c8003f; }
+.calc-btn:active { transform: scale(.98); }
+
+/* 결과 */
+.result-wrap { display: none; margin-top: 4px; }
+.result-wrap.show { display: block; }
+
+.result-header {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 10px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.result-header span { color: var(--primary); }
+
+.rental-result {
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; margin-bottom: 10px;
+}
+.rental-result-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+}
+.rental-result-header.ok { background: #f0fdf4; border-bottom: 1px solid #bbf7d0; }
+.rental-result-header.ng { background: #fef2f2; border-bottom: 1px solid #fecaca; }
+.rental-result-header.warn { background: #fffbeb; border-bottom: 1px solid #fde68a; }
+
+.result-status {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.status-ok { background: #dcfce7; }
+.status-ng { background: #fee2e2; }
+.status-warn { background: #fef9c3; }
+
+.result-name { font-size: 14px; font-weight: 700; }
+.result-name.ok { color: #15803d; }
+.result-name.ng { color: #b91c1c; }
+.result-name.warn { color: #a16207; }
+
+.result-tag {
+  margin-left: auto; font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px;
+}
+.tag-ok { background: #dcfce7; color: #15803d; }
+.tag-ng { background: #fee2e2; color: #b91c1c; }
+.tag-warn { background: #fef9c3; color: #a16207; }
+
+.result-detail {
+  padding: 10px 14px;
+  background: var(--bg);
+}
+.result-detail-row {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--muted); margin-bottom: 5px;
+}
+.result-detail-row:last-child { margin: 0; }
+.detail-icon { flex-shrink: 0; }
+.detail-ok { color: #16a34a; }
+.detail-ng { color: #dc2626; }
+.detail-warn { color: #d97706; }
+
+.reset-btn {
+  width: 100%; padding: 11px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  color: var(--muted); cursor: pointer; font-family: inherit;
+  margin-top: 6px; transition: all .2s;
+}
+.reset-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ══ 준비중 탭 ══ */
+.coming-wrap {
+  text-align: center; padding: 80px 20px;
+}
+.coming-wrap .icon { font-size: 52px; margin-bottom: 16px; }
+.coming-wrap h3 { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 8px; }
+.coming-wrap p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ══ 전산 매뉴얼 (탭5) ══ */
+.top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 500px) { .top-grid { grid-template-columns: 1fr; } }
+.icard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+.ictitle { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 12px; }
+.arow { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.arow:last-of-type { margin-bottom: 0; }
+.aicon { font-size: 18px; }
+.alabel { font-size: 10px; color: var(--muted); }
+.aurl { font-size: 12px; font-weight: 700; color: var(--primary); }
+.rrow { display: flex; align-items: center; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.rrow:last-of-type { border: none; }
+.rname { font-size: 11px; font-weight: 700; color: var(--text); min-width: 76px; }
+.rtags { display: flex; gap: 3px; flex-wrap: wrap; }
+.rtag { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 20px; }
+.rtag-r { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(232,0,77,.2); }
+.rtag-e { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(0,178,178,.2); }
+.warnbox { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.25); border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: 11px; color: #92650a; line-height: 1.65; }
+.warnbox strong { color: #b45309; }
+.expand-btn { width: 100%; padding: 10px; margin-bottom: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all .2s; font-family: inherit; }
+.expand-btn:hover { border-color: var(--primary); color: var(--primary); }
+.scard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
+.shead { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+.snum { width: 30px; height: 30px; border-radius: 8px; background: var(--primary); color: white; font-size: 13px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.snum.tip { background: var(--teal); }
+.snum.fee { background: #7c3aed; }
+.stitle { font-size: 13px; font-weight: 700; color: var(--text); }
+.ssub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.sarrow { margin-left: auto; color: var(--muted); font-size: 11px; transition: transform .25s; }
+.scard.open .sarrow { transform: rotate(180deg); }
+.sbody { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.scard.open .sbody { display: block; }
+.imgwrap { margin: 12px 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); cursor: zoom-in; }
+.imgwrap img { width: 100%; display: block; height: 180px; object-fit: contain; background: #f8f9fc; }
+.desc { font-size: 12px; color: #475569; line-height: 1.8; margin-bottom: 8px; }
+.desc strong { color: var(--text); font-weight: 700; }
+.desc em { color: var(--primary); font-style: normal; font-weight: 600; }
+.pbox { background: var(--primary-dim); border: 1px solid rgba(232,0,77,.15); border-radius: 8px; padding: 10px 12px; font-size: 11px; color: #be123c; line-height: 1.8; margin-top: 8px; }
+.pbox strong { color: var(--primary); }
+.tbox { background: var(--teal-dim); border: 1px solid rgba(0,178,178,.2); border-radius: 8px; padding: 10px 12px; font-size: 11px; color: #0e7490; line-height: 1.8; margin-top: 8px; }
+.sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+@media (max-width: 400px) { .sgrid { grid-template-columns: 1fr; } }
+.si { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px; }
+.sb { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 3px; }
+.s1{background:#dbeafe;color:#1d4ed8} .s2{background:#dcfce7;color:#15803d}
+.s3{background:#fef9c3;color:#a16207} .s4{background:#fee2e2;color:#b91c1c}
+.s5{background:#d1fae5;color:#065f46} .s6{background:#f3f4f6;color:#6b7280}
+.sdesc { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+/* 라이트박스 */
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 16px; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+.lbclose { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,.15); border: none; color: white; font-size: 20px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- ══ 상단바 (헤더+탭 통합) ══ -->
+<div class="top-bar">
+  <div class="header-line">
+    <span class="hbadge">내부용</span>
+    <span class="htitle">파트너 매뉴얼</span>
+  </div>
+  <div class="tab-line">
+    <button class="tab-btn active" onclick="goTab('home',this)">🏠 홈</button>
+    <button class="tab-btn" onclick="goTab('calc',this)">🔍 렌탈사 추천</button>
+    <button class="tab-btn" onclick="goTab('policy',this)">📋 가입정책</button>
+    <button class="tab-btn" onclick="goTab('admin',this)">⚙️ 관리자 매뉴얼</button>
+    <button class="tab-btn" onclick="goTab('jeonsan',this)">💻 전산접수</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<!-- ══ 탭1: 홈 ══ -->
+<div class="tab-content active" id="tab-home">
+  <div class="home-hero">
+    <h1>파트너 <em>매뉴얼</em> 센터</h1>
+    <p>업무에 필요한 모든 가이드</p>
+  </div>
+  <div class="wrap">
+    <div class="notice-box">
+      <span style="font-size:18px;flex-shrink:0;">📢</span>
+      <div><strong>이용 안내</strong><br>아래 메뉴 또는 상단 탭을 클릭해 원하는 매뉴얼로 이동하세요.</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="goTabById('calc')">
+        <div class="mc-icon">🔍</div>
+        <div class="mc-title">렌탈사 추천 계산기</div>
+        <div class="mc-desc">나이·신용점수 입력하면 가능한 렌탈사 추천</div>
+        <span class="mc-badge badge-new">NEW</span>
+      </div>
+      <div class="menu-card" onclick="goTabById('policy')">
+        <div class="mc-icon">📋</div>
+        <div class="mc-title">렌탈사별 가입정책</div>
+        <div class="mc-desc">나이·신용점수·한도·외국인 여부 등<br>렌탈사별 상세 가입 조건</div>
+        <span class="mc-badge badge-new">업데이트</span>
+      </div>
+      <div class="menu-card" onclick="goTabById('admin')">
+        <div class="mc-icon">⚙️</div>
+        <div class="mc-title">관리자 페이지 매뉴얼</div>
+        <div class="mc-desc">홈페이지 관리자 사용법<br>SEO·배너·상품진열 설정 가이드</div>
+        <span class="mc-badge badge-new">업데이트</span>
+      </div>
+      <div class="menu-card" onclick="goTabById('jeonsan')">
+        <div class="mc-icon">💻</div>
+        <div class="mc-title">전산 접수 매뉴얼</div>
+        <div class="mc-desc">렌탈 고객 전산 접수 단계별 가이드</div>
+        <span class="mc-badge badge-new">업데이트</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 탭2: 렌탈사 추천 계산기 ══ -->
+<div class="tab-content" id="tab-calc">
+  <div class="calc-hero">
+    <h2>렌탈사 <em>추천 계산기</em></h2>
+    <p>나이와 신용점수를 입력하면 가입 가능한 렌탈사를 알려드려요</p>
+  </div>
+  <div class="wrap">
+    <div class="calc-card">
+      <div class="calc-label">나이 (만 나이 기준)</div>
+      <div class="calc-input-row">
+        <input class="calc-input" type="number" id="inputAge" placeholder="예) 28" min="1" max="99">
+        <span class="calc-unit">세</span>
+      </div>
+    </div>
+    <div class="calc-card">
+      <div class="calc-label">나이스(NICE) 신용점수</div>
+      <div class="calc-input-row">
+        <input class="calc-input" type="number" id="inputScore" placeholder="예) 720" min="0" max="1000">
+        <span class="calc-unit">점</span>
+      </div>
+      <div class="score-hint">
+        <span>🟢 800+: 우량</span>
+        <span>🟡 710~799: 양호</span>
+        <span>🔴 710 미만: 주의</span>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcRental()">렌탈사 추천 받기 →</button>
+
+    <!-- 결과 -->
+    <div class="result-wrap" id="resultWrap">
+      <div class="calc-card" style="margin-top:14px;">
+        <div class="result-header">
+          <span id="inputSummary"></span> 기준 추천 결과
+        </div>
+        <div id="resultList"></div>
+        <button class="reset-btn" onclick="resetCalc()">↺ 다시 입력하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 탭3: 가입정책 ══ -->
+<div class="tab-content" id="tab-policy">
+  <div class="wrap">
+
+    <!-- 이니렌탈 -->
+    <div class="scard open" id="p1">
+      <div class="shead" onclick="tog('p1')">
+        <div class="snum" style="background:#0066cc;">🏢</div>
+        <div><div class="stitle">이니렌탈</div><div class="ssub">만 20~79세 · 나이스 710점 이상</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 만 20세 ~ 만 79세<br>
+          📊 <strong>신용점수</strong>: 나이스 710점 이상<br>
+          🔢 <strong>가입 대수</strong>: 동일 제품 2개 불가 / 타 제품으로 최대 2개<br>
+          🚫 <strong>환수 규정</strong>: 없음
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          💳 <strong>한도 기준 (대략)</strong><br>
+          · 710~779점: 약 600만원<br>
+          · 780~839점: 약 1,000만원<br>
+          · 840점 이상: 약 1,500만원
+        </div>
+        <div class="pbox" style="margin-bottom:10px;">
+          📋 <strong>가입 절차</strong>: 다이렉트 링크 작성(1차 승인) → 해피콜<br>
+          ⚠️ 해피콜 시 렌탈료·주소를 모르면 부결될 수 있으니 고객에게 미리 안내하세요.
+        </div>
+        <div class="tbox">
+          📞 해피콜: <strong>1800-1739</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 헬로렌탈 -->
+    <div class="scard open" id="p2">
+      <div class="shead" onclick="tog('p2')">
+        <div class="snum" style="background:#e8004d;">👋</div>
+        <div><div class="stitle">LG 헬로비전 (헬로렌탈)</div><div class="ssub">만 24~75세 · 등급별 한도 · 환수 없음</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 만 24세 ~ 만 75세 (생일 무관, 01년생~50년생 기준)<br>
+          🚫 <strong>환수 규정</strong>: 없음<br>
+          🌏 <strong>외국인</strong>: F-5(영주), F-6(결혼비자) 가능 / 외국인등록증 앞뒷면 필수
+        </div>
+        <div style="overflow-x:auto;margin:10px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:360px;">
+            <tr style="background:#1a1d26;color:white;"><th style="padding:7px;border:1px solid #e8ecf4;">등급</th><th style="padding:7px;border:1px solid #e8ecf4;">신용카드</th><th style="padding:7px;border:1px solid #e8ecf4;">자동이체</th><th style="padding:7px;border:1px solid #e8ecf4;">최대 대수</th><th style="padding:7px;border:1px solid #e8ecf4;">가능 품목</th></tr>
+            <tr style="background:#dbeafe;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Blue (1~3)</td><td style="padding:6px;border:1px solid #e8ecf4;">1,100만원</td><td style="padding:6px;border:1px solid #e8ecf4;">360만원</td><td style="padding:6px;border:1px solid #e8ecf4;">4대</td><td style="padding:6px;border:1px solid #e8ecf4;">전품목</td></tr>
+            <tr style="background:#dcfce7;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Green (4~5)</td><td style="padding:6px;border:1px solid #e8ecf4;">600만원</td><td style="padding:6px;border:1px solid #e8ecf4;">300만원</td><td style="padding:6px;border:1px solid #e8ecf4;">2대</td><td style="padding:6px;border:1px solid #e8ecf4;">전품목</td></tr>
+            <tr style="background:#fef9c3;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Yellow (6)</td><td style="padding:6px;border:1px solid #e8ecf4;">400만원</td><td style="padding:6px;border:1px solid #e8ecf4;">180만원</td><td style="padding:6px;border:1px solid #e8ecf4;">2대</td><td style="padding:6px;border:1px solid #e8ecf4;">에어컨/냉난방기/공청기/로봇청소기/음처기</td></tr>
+          </table>
+        </div>
+        <div class="warnbox" style="margin-bottom:10px;">
+          ⚠️ <strong>F코드</strong>: 발생 시점부터 6개월간 재접수 불가<br>
+          💡 신용카드 사용 시 한도 상승. 가능하면 신용카드 결제 권장
+        </div>
+        <div class="tbox">
+          🔄 중도해지 없음 - 잔여 렌탈료 일시불 납부 후 소유권 이전만 가능<br>
+          👨‍👩‍👧 가족 간 명의변경 가능<br>
+          📞 해피콜: 1855-1020 / 고객센터: 1855-1000
+        </div>
+      </div>
+    </div>
+
+    <!-- 스마트렌탈 -->
+    <div class="scard open" id="p3">
+      <div class="shead" onclick="tog('p3')">
+        <div class="snum" style="background:#059669;">📱</div>
+        <div><div class="stitle">스마트렌탈</div><div class="ssub">만 23~68세 · 나이스 710점 이상 · 환수 없음</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 연나이 02년생~57년생 기준)<br>
+          📊 <strong>신용점수</strong>: 나이스 710점 이상 (7등급도 710점 이상이면 500만원 승인)<br>
+          🚫 <strong>환수 규정</strong>: 없음<br>
+          🚫 <strong>외국인</strong>: 불가
+        </div>
+        <div style="overflow-x:auto;margin:10px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:300px;">
+            <tr style="background:#1a1d26;color:white;"><th style="padding:7px;border:1px solid #e8ecf4;">등급</th><th style="padding:7px;border:1px solid #e8ecf4;">총액 한도</th><th style="padding:7px;border:1px solid #e8ecf4;">예외 승인</th></tr>
+            <tr style="background:#dbeafe;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Blue (1~4등급)</td><td style="padding:6px;border:1px solid #e8ecf4;">1,000만원</td><td style="padding:6px;border:1px solid #e8ecf4;">-</td></tr>
+            <tr style="background:#dcfce7;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Green (5~6등급)</td><td style="padding:6px;border:1px solid #e8ecf4;">700만원</td><td style="padding:6px;border:1px solid #e8ecf4;">70만원까지</td></tr>
+            <tr style="background:#fef9c3;"><td style="padding:6px;border:1px solid #e8ecf4;font-weight:700;">Yellow (7등급)</td><td style="padding:6px;border:1px solid #e8ecf4;">500만원</td><td style="padding:6px;border:1px solid #e8ecf4;">50만원까지</td></tr>
+          </table>
+        </div>
+        <div class="pbox" style="margin-bottom:10px;">
+          🔧 <strong>비설치 상품</strong> (청소기·로봇청소기·공청기·사운드바·시네빔·와인셀러)<br>
+          · 신용카드 결제만 가능 + 신용 5등급 이상 (두 조건 모두 충족)<br>
+          · 동일 제품 불가, 최대 2대 (ex. TV 1대 + 공청기 1대)<br>
+          · 기존 비설치 제품 사용 중이면 12개월 정상납부 후 추가 가능
+        </div>
+        <div class="warnbox" style="margin-bottom:10px;">
+          ⚠️ 선접수 취소 후 재접수: 5영업일(주말·공휴일 제외) 이후<br>
+          ⚠️ 중도해지: 잔여 렌탈료 전액 납부 후 해지 가능
+        </div>
+        <div class="tbox">
+          📞 해피콜: 1644-7018 / 고객센터: 02-1644-7018 (반드시 02 붙여야 함)
+        </div>
+      </div>
+    </div>
+
+    <!-- 현대 유버스 -->
+    <div class="scard open" id="p4">
+      <div class="shead" onclick="tog('p4')">
+        <div class="snum" style="background:#b45309;">🚌</div>
+        <div><div class="stitle">현대 유버스</div><div class="ssub">만 24~70세 · 나이스 750점 이상 권장</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 만 24세 ~ 만 70세 (2001년생 생일 이후 ~ 1955년생 생일 전)<br>
+          📊 <strong>신용점수</strong>: 나이스 750점 이상 권장<br>
+          🔄 <strong>환수 규정</strong>: 12회차 이내 해지 시 환수 / 연체 시 미환수<br>
+          🌏 <strong>외국인</strong>: F-2, F-4, F-5, F-6 가능 / 외국인등록증 앞뒷면 필수<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1인당 600만원 최대 / 1대만 가능 (에어컨·냉난방기는 한도 내 N대 가능)
+        </div>
+        <div class="pbox" style="margin-bottom:10px;">
+          📋 <strong>필수 서류</strong><br>
+          · 개인: 신분증 앞뒷면 (동일 배경) — 승인 후 유버스로 전송 필수<br>
+          · 개인사업자: 사업자등록증 + 통장사본 + 이메일<br>
+          · 법인: 사업 개시 1년 이상 / 사업자등록증·통장사본·이메일·신분증·법인등기부등본(2개월 이내)
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          🏢 냉난방기 사업장 설치 시 1~3등급: 한도 2배, 최대 2,000만원<br>
+          🔄 선접수 규정: 취소 후 7일 / 보류 시 14일 이후 재접수
+        </div>
+        <div class="warnbox">
+          ⚠️ 연대보증인 제도 폐지 / 연대보증 불가<br>
+          📞 해피콜: 1588-5897 / 고객센터: 1588-5897
+        </div>
+      </div>
+    </div>
+
+    <!-- 소노아임레디 -->
+    <div class="scard open" id="p5">
+      <div class="shead" onclick="tog('p5')">
+        <div class="snum" style="background:#7c3aed;">✨</div>
+        <div><div class="stitle">소노아임레디 (상조)</div><div class="ssub">만 20~74세 · KCB 636점 이상 · 외국인 불가</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 만 20세 ~ 74세<br>
+          📊 <strong>신용점수</strong>: KCB 636점 이상 + BS 내부 심사 알고리즘<br>
+          💰 <strong>가입 한도</strong>: 총 렌탈료 1,000만원 이하 (5구좌 = 1,000만원)<br>
+          🚫 <strong>외국인</strong>: 불가<br>
+          🔄 <strong>환수 규정</strong>: 있음 (13개월까지 납부 시 환수 없음)
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          📦 <strong>스마트케어330 상품 구성</strong><br>
+          · 2구좌: 33,000원/월<br>
+          · 4구좌: 66,000원/월<br>
+          · 6구좌: 99,000원/월<br>
+          💳 체크카드·신용카드만 가능 (계좌이체 불가)
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          🔑 <strong>핵심 특징</strong><br>
+          · BS렌탈사에서 신용조회 → 기존 BS렌탈 사용 중이면 그만큼 한도 차감<br>
+          · 60개월 정상납부 후 위약금 없이 해지 가능 / 가전 반납 없음 (소유권 이전)<br>
+          · 약정 200개월 전액 납부 후 익월 해약 시 전액 환급<br>
+          · 출금 2회: 당일 가전금액 + 익일 상조금액
+        </div>
+        <div class="warnbox">
+          ⚠️ 전자서명·해피콜 정보 불일치 시 자동 취소 후 재발송<br>
+          📞 가입센터(해피콜): 1661-0068 / 소노 컨택센터: 1588-8511<br>
+          📞 BS-ON 고객센터: 1588-6990 / 24시간 긴급 장례: 1588-2227
+        </div>
+      </div>
+    </div>
+
+    <!-- 보람상조피플 -->
+    <div class="scard open" id="p6">
+      <div class="shead" onclick="tog('p6')">
+        <div class="snum" style="background:#db2777;">🌸</div>
+        <div><div class="stitle">보람상조피플</div><div class="ssub">만 25~70세 · 나이스 750점 이상 권장 · 유버스 심사</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          👤 <strong>가입 연령</strong>: 만 25세 ~ 만 70세 (1955년 생일 전까지)<br>
+          📊 <strong>신용점수</strong>: 나이스 750점 이상 권장 (현대 유버스에서 심사)<br>
+          💰 <strong>가입 한도</strong>: 최대 4구좌<br>
+          🚫 <strong>환수 규정</strong>: 없음<br>
+          🏠 <strong>주소 확인 필요</strong>: 등본, 신분증, 집 계약서 등
+        </div>
+        <div class="pbox">
+          💳 <strong>출금 주의사항 (반드시 고객 사전 안내!)</strong><br>
+          · 당일: 가전제품 가격 출금<br>
+          · 익일: 상조 금액 출금<br>
+          두 번 출금됩니다. 고객이 잔고 부족으로 당황하지 않도록 미리 안내하세요.
+        </div>
+        <div class="tbox" style="margin-top:10px;">
+          📞 렌탈 고객센터: 1670-5008 / 상조 고객센터: 1588-7979
+        </div>
+      </div>
+    </div>
+
+    <!-- 공통 참고사항 -->
+    <div class="scard open" id="p7">
+      <div class="shead" onclick="tog('p7')">
+        <div class="snum" style="background:#475569;">📌</div>
+        <div><div class="stitle">공통 참고사항</div><div class="ssub">모든 렌탈사 공통 안내</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="tbox" style="margin-top:10px;margin-bottom:10px;">
+          📊 <strong>나이스(NICE) vs KCB</strong><br>
+          · 대부분 렌탈사: 나이스(NICE) 기준<br>
+          · 소노아임레디만: KCB 기준<br>
+          · 고객이 토스·카카오뱅크 앱에서 무료 확인 가능 (나이스 기준)
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          🏦 <strong>개인사업자 공통</strong><br>
+          대부분 렌탈사에서 개인으로 진행 후 세금계산서 발급 가능<br>
+          설치 이후 고객이 고객센터에 직접 요청
+        </div>
+        <div class="warnbox">
+          ⚠️ 신용점수 기준은 수시로 변경됩니다. 접수 전 최신 정책을 꼭 확인하세요.<br>
+          ⚠️ 710점 이상이어도 연체이력, 단기 다수 조회 등으로 부결될 수 있습니다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ 탭4: 관리자 매뉴얼 ══ -->
+<div class="tab-content" id="tab-admin">
+  <div class="wrap">
+
+    <!-- 로그인 안내 (이미지 없음) -->
+    <div class="scard open" id="a0">
+      <div class="shead" onclick="tog('a0')">
+        <div class="snum" style="background:#7c3aed;">🔑</div>
+        <div><div class="stitle">관리자 페이지 로그인</div><div class="ssub">본인 홈페이지에서 부여받은 계정으로 로그인</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <p class="desc" style="margin-top:10px;">
+          본인 홈페이지에서 <strong>부여받은 아이디/비밀번호</strong>로 로그인하면,
+          기존 로그인 버튼 자리에 <em>관리자</em> 메뉴가 생성됩니다.
+        </p>
+        <div class="tbox">
+          📢 <strong>본사 공지사항</strong>: 공지 및 안내 게시판. 수수료 변경, 정책 업데이트 등 중요 공지가 올라옵니다. 주기적으로 확인해 주세요.<br><br>
+          💰 <strong>수수료 공지</strong>: 렌탈사별 수수료 변경 내용이 게시됩니다. 영업 전 반드시 최신 내용을 확인하세요.
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 기본정보관리 -->
+    <div class="scard open" id="a1">
+      <div class="shead" onclick="tog('a1')">
+        <div class="snum" style="background:#7c3aed;">01</div>
+        <div><div class="stitle">기본정보 관리</div><div class="ssub">홈페이지 하단 정보 및 전화번호 수정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/01.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/01.png" alt="기본정보관리">
+        </div>
+        <p class="desc">
+          본인의 <strong>사업자 정보(상호명, 대표자, 주소, 전화번호 등)</strong>를 입력하고 저장하면
+          홈페이지 하단 푸터 정보와 전화번호가 자동으로 반영됩니다.
+        </p>
+        <div class="pbox">
+          📌 사업자가 없는 경우 개인 정보 또는 담당 매니저 정보로 입력해도 됩니다.<br>
+          📌 전화번호는 고객 상담 연락처로 홈페이지 전체에 표시되니 정확하게 입력하세요.
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 검색엔진최적화 -->
+    <div class="scard open" id="a2">
+      <div class="shead" onclick="tog('a2')">
+        <div class="snum" style="background:#7c3aed;">02</div>
+        <div><div class="stitle">검색엔진 최적화(SEO) 설정</div><div class="ssub">네이버·구글 검색 노출을 위한 핵심 설정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/02.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/02.png" alt="SEO설정">
+        </div>
+        <p class="desc">
+          홈페이지가 검색 결과에 잘 노출되도록 하는 가장 중요한 설정입니다.
+          아래 항목들을 꼼꼼하게 입력할수록 네이버·구글 검색 노출에 유리합니다.
+        </p>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>🖥️ 브라우저 타이틀</strong><br>
+          브라우저 상단 탭과 검색결과 제목으로 표시됩니다.<br>
+          예) <em>홍길동 가전렌탈 | 초기비용 0원 렌탈 전문</em>
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>📝 메타태그 (제작자명)</strong><br>
+          사이트 제작자 또는 운영자 이름을 간략히 입력합니다.
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>📄 메타태그2 (페이지 설명)</strong><br>
+          검색결과에서 제목 아래 표시되는 설명문입니다. 1~2문장으로 간결하게 작성하세요.<br>
+          예) <em>초기비용 0원! 에어컨·세탁기·냉장고 렌탈 전문 상담사입니다. 지금 바로 무료 상담받으세요.</em>
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>🔍 메타태그3 (키워드)</strong><br>
+          사이트와 관련된 검색 키워드를 콤마(,)로 구분해 입력합니다.<br>
+          예) <em>가전렌탈, 에어컨렌탈, 세탁기렌탈, 초기비용0원, 렌탈파트너</em>
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>➕ 추가 메타태그</strong><br>
+          네이버 서치어드바이저, 구글 서치콘솔 사이트 소유 확인용 meta 태그를 여기에 입력합니다.<br>
+          예) <em>&lt;meta name="naver-site-verification" content="코드"/&gt;</em>
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          <strong>📦 HEAD 내부 태그</strong><br>
+          HTML &lt;HEAD&gt; 안에 추가할 JavaScript 태그를 입력합니다.<br>
+          구글 태그(Google Tag), 메타 픽셀 등 광고 추적 스크립트를 여기에 넣으세요.
+        </div>
+        <div class="tbox">
+          <strong>📦 BODY 내부 태그</strong><br>
+          HTML &lt;BODY&gt; 후반부에 삽입할 JavaScript 태그를 입력합니다.<br>
+          ⚠️ JavaScript 태그만 허용됩니다. 다른 태그 입력 시 오류가 발생할 수 있습니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 소셜네트워크 -->
+    <div class="scard open" id="a3">
+      <div class="shead" onclick="tog('a3')">
+        <div class="snum" style="background:#7c3aed;">03</div>
+        <div><div class="stitle">소셜네트워크 설정</div><div class="ssub">SNS 링크 설정 (배너 활용 추천)</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/03.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/03.png" alt="소셜네트워크">
+        </div>
+        <p class="desc">
+          인스타그램, 블로그, 유튜브 등 SNS 링크를 연결하는 설정입니다.
+          사용하지 않아도 홈페이지 운영에 큰 지장은 없습니다.
+        </p>
+        <div class="warnbox">
+          💡 SNS 링크보다는 <strong>통합배너(06번)</strong>를 활용해 카카오 오픈채팅 등 원하는 링크를 직접 연결하는 방식이 더 효과적입니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 쇼핑몰 약관 -->
+    <div class="scard open" id="a4">
+      <div class="shead" onclick="tog('a4')">
+        <div class="snum" style="background:#7c3aed;">04</div>
+        <div><div class="stitle">쇼핑몰 약관 설정</div><div class="ssub">개인정보처리방침만 설정하면 됩니다</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/04.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/04.png" alt="약관설정">
+        </div>
+        <p class="desc">
+          홈페이지에 회원가입 기능이 없으므로 <strong>개인정보처리방침만 설정</strong>하시면 됩니다.
+        </p>
+        <div class="tbox">
+          📋 <strong>사업자가 있는 경우</strong>: 가맹 계약 시 본사에서 직접 입력해 드립니다.<br>
+          📋 <strong>계약 후 사업자를 낸 경우</strong>: 담당 매니저에게 양식을 요청하세요.
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 로고/파비콘 -->
+    <div class="scard open" id="a5">
+      <div class="shead" onclick="tog('a5')">
+        <div class="snum" style="background:#7c3aed;">05</div>
+        <div><div class="stitle">로고 & 파비콘 설정</div><div class="ssub">SNS 공유 이미지 및 브라우저 아이콘 설정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/05.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/05.png" alt="로고파비콘">
+        </div>
+        <p class="desc">
+          카카오톡이나 SNS에서 홈페이지 링크를 공유했을 때 표시되는 <strong>대표 이미지(OG 이미지)</strong>와
+          브라우저 탭에 표시되는 <strong>파비콘(작은 아이콘)</strong>을 설정하는 페이지입니다.
+        </p>
+        <div class="pbox">
+          📌 카카오링크 공유 시 이미지가 없으면 허전하게 보일 수 있습니다. 홍보 이미지를 등록해두면 클릭률이 올라갑니다.<br>
+          📌 파비콘은 브라우저 탭에 표시되는 작은 아이콘으로, 브랜드 신뢰도에 영향을 줍니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 통합배너관리 -->
+    <div class="scard open" id="a6">
+      <div class="shead" onclick="tog('a6')">
+        <div class="snum" style="background:#7c3aed;">06</div>
+        <div><div class="stitle">통합배너 관리 (PC)</div><div class="ssub">카카오 링크 연결 및 배너 이미지 수정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/06.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/06.png" alt="통합배너PC">
+        </div>
+        <p class="desc">
+          PC 홈페이지에 표시되는 배너 이미지와 링크를 관리하는 페이지입니다.
+          아무것도 수정하지 않으면 <strong>본사 기본 배너</strong>가 그대로 유지됩니다.
+        </p>
+        <div class="tbox">
+          🔗 <strong>카카오 오픈채팅 링크 연결 시 이 메뉴에서 설정</strong>합니다.<br>
+          원하는 배너를 클릭하면 본인이 원하는 이미지와 링크로 직접 수정할 수 있습니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 통합배너관리(모바일) -->
+    <div class="scard open" id="a7">
+      <div class="shead" onclick="tog('a7')">
+        <div class="snum" style="background:#7c3aed;">07</div>
+        <div><div class="stitle">통합배너 관리 (모바일)</div><div class="ssub">모바일 전용 배너 설정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/07.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/07.png" alt="통합배너모바일">
+        </div>
+        <p class="desc">
+          모바일 홈페이지에 표시되는 배너를 관리합니다. PC 배너와 별도로 설정되므로,
+          카카오 링크를 수정할 경우 <strong>PC(06번)와 모바일(07번) 모두 변경</strong>해야 합니다.
+        </p>
+        <div class="warnbox">
+          ⚠️ 배너 링크를 바꿀 때 PC만 바꾸고 모바일을 빠뜨리는 경우가 많습니다. 둘 다 꼭 확인하세요!
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 스킨관리 -->
+    <div class="scard open" id="a8">
+      <div class="shead" onclick="tog('a8')">
+        <div class="snum" style="background:#7c3aed;">08</div>
+        <div><div class="stitle">스킨 관리</div><div class="ssub">색상·메뉴순서·홈페이지 상품 진열 설정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/08.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/08.png" alt="스킨관리">
+        </div>
+        <p class="desc">
+          홈페이지의 <strong>색상 테마, 상단 메뉴 순서, 메인 상품 진열</strong>을 설정하는 페이지입니다.
+        </p>
+        <div class="tbox" style="margin-bottom:10px;">
+          🎨 <strong>색상 변경</strong>: 홈페이지 전체 메인 컬러를 변경할 수 있습니다.
+        </div>
+        <div class="tbox" style="margin-bottom:10px;">
+          📋 <strong>메뉴 순서 변경</strong>: 상단 네비게이션 메뉴의 노출 순서를 조정할 수 있습니다.
+        </div>
+        <div class="tbox">
+          🛒 <strong>상품 진열</strong>: 메인 페이지에 노출할 상품을 직접 선택할 수 있습니다.<br>
+          <strong>렌탈상품관리(12번)</strong>에서 확인한 <em>상품코드를 쉼표(,)로 구분해 입력</em>하면 원하는 상품만 메인에 올릴 수 있습니다.<br>
+          예) 1001, 1023, 1045
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 팝업관리 -->
+    <div class="scard open" id="a9">
+      <div class="shead" onclick="tog('a9')">
+        <div class="snum" style="background:#7c3aed;">09</div>
+        <div><div class="stitle">팝업 관리</div><div class="ssub">홈페이지 접속 시 팝업 설정</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/09.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/09.png" alt="팝업관리">
+        </div>
+        <p class="desc">
+          고객이 홈페이지에 접속했을 때 <strong>자동으로 뜨는 팝업</strong>을 관리하는 페이지입니다.
+        </p>
+        <div class="tbox">
+          💡 이벤트, 프로모션, 긴급 공지 등을 팝업으로 띄울 때 활용하세요.<br>
+          팝업 이미지에 카카오 상담 링크를 연결하면 상담 유도 효과가 높아집니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 상품공지사항 -->
+    <div class="scard open" id="a10">
+      <div class="shead" onclick="tog('a10')">
+        <div class="snum" style="background:#7c3aed;">10</div>
+        <div><div class="stitle">상품 공지사항</div><div class="ssub">상세페이지 상단 이미지 등록</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/10.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/10.png" alt="상품공지사항">
+        </div>
+        <p class="desc">
+          각 상품 상세페이지 <strong>상단에 표시되는 공지 이미지</strong>를 등록하는 페이지입니다.
+        </p>
+        <div class="tbox">
+          💡 활용 예시: "저희 업체는 수수료 환수가 없습니다", "지금 신청 시 등록비 0원" 등 본인 업체만의 차별화 포인트를 이미지로 만들어 등록하면 고객 신뢰도와 전환율이 높아집니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 개별상품관리 -->
+    <div class="scard open" id="a11">
+      <div class="shead" onclick="tog('a11')">
+        <div class="snum" style="background:#7c3aed;">11</div>
+        <div><div class="stitle">개별 상품 관리</div><div class="ssub">렌탈사별 상품 목록 확인</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/11.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/11.png" alt="개별상품관리">
+        </div>
+        <p class="desc">
+          각 렌탈사에 어떤 상품이 등록되어 있는지 <strong>렌탈사별로 구분해서 확인</strong>할 수 있는 페이지입니다.
+        </p>
+        <div class="tbox">
+          💡 특정 렌탈사의 상품만 보고 싶을 때 필터링해서 확인할 수 있습니다.<br>
+          상품별 상세 정보(월 렌탈료, 약정 기간 등)도 여기서 확인 가능합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 렌탈상품관리 -->
+    <div class="scard open" id="a12">
+      <div class="shead" onclick="tog('a12')">
+        <div class="snum" style="background:#7c3aed;">12</div>
+        <div><div class="stitle">렌탈 상품 관리</div><div class="ssub">홈페이지 게시 상품 확인 및 상품코드 조회</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/12.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/12.png" alt="렌탈상품관리">
+        </div>
+        <p class="desc">
+          현재 홈페이지에 올라와 있는 <strong>전체 렌탈 상품 목록</strong>을 확인할 수 있습니다.
+          각 상품 뒤에 표시된 <em>상품코드 번호</em>가 스킨관리 상품 진열에 사용됩니다.
+        </p>
+        <div class="tbox">
+          🔢 <strong>상품코드 활용법</strong><br>
+          원하는 상품의 코드를 복사 → <strong>스킨관리(08번)</strong>의 상품진열 칸에 쉼표로 구분해 입력<br>
+          → 메인 홈페이지에 해당 상품이 노출됩니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 신청리스트 -->
+    <div class="scard open" id="a13">
+      <div class="shead" onclick="tog('a13')">
+        <div class="snum" style="background:#7c3aed;">13</div>
+        <div><div class="stitle">신청 리스트</div><div class="ssub">홈페이지 렌탈 신청 접수 확인</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/13.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/13.png" alt="신청리스트">
+        </div>
+        <p class="desc">
+          홈페이지를 통해 렌탈 신청이 들어오면 <strong>이 페이지에서 실시간으로 확인</strong>할 수 있습니다.
+          신청이 들어오면 <em>등록된 이메일로도 동시에 알림</em>이 발송됩니다.
+        </p>
+        <div class="warnbox">
+          ⚠️ 신청이 들어오면 <strong>30분 이내 빠르게 연락</strong>하는 것이 계약 성공률을 높이는 핵심입니다.<br>
+          이메일 알림을 켜두고 수시로 확인하는 습관을 들이세요.
+        </div>
+      </div>
+    </div>
+
+    <!-- 14 빠른상담신청 -->
+    <div class="scard open" id="a14">
+      <div class="shead" onclick="tog('a14')">
+        <div class="snum" style="background:#7c3aed;">14</div>
+        <div><div class="stitle">빠른 상담 신청</div><div class="ssub">홈페이지 하단 빠른상담 접수 확인</div></div>
+        <div class="sarrow">▼</div>
+      </div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/14.png')">
+          <img src="https://a01059651000-creator.github.io/rentin/14.png" alt="빠른상담신청">
+        </div>
+        <p class="desc">
+          홈페이지 하단의 <strong>빠른 상담 신청 폼</strong>을 통해 접수된 고객 정보가 이 페이지에 표시됩니다.
+          성함, 연락처, 관심 제품 등 고객이 입력한 정보를 확인할 수 있습니다.
+        </p>
+        <div class="tbox">
+          💡 빠른상담 신청과 렌탈 신청(13번)은 별도로 관리됩니다.<br>
+          두 페이지 모두 주기적으로 확인해 놓치는 고객이 없도록 하세요.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ 탭5: 전산 접수 매뉴얼 ══ -->
+<div class="tab-content" id="tab-jeonsan">
+  <div class="wrap">
+
+    <div class="top-grid">
+      <div class="icard">
+        <div class="ictitle">접속 주소</div>
+        <div class="arow"><div class="aicon">🖥️</div><div><div class="alabel">PC</div><div class="aurl">rentdata.co.kr</div></div></div>
+        <div class="arow"><div class="aicon">📱</div><div><div class="alabel">모바일</div><div class="aurl">rentdata.co.kr/smart</div></div></div>
+        <div class="warnbox" style="margin-top:12px;">💻 <strong>수수료 조회는 PC 전용</strong><br>모바일에서는 수수료 카테고리가 보이지 않습니다.</div>
+      </div>
+      <div class="icard">
+        <div class="ictitle">렌탈사별 필수 입력 정보</div>
+        <div class="rrow"><div class="rname">이니렌탈</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span></div></div>
+        <div class="rrow"><div class="rname">헬로렌탈</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span></div></div>
+        <div class="rrow"><div class="rname">스마트렌탈</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span></div></div>
+        <div class="rrow"><div class="rname">유버스</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span><span class="rtag rtag-e">생년월일</span></div></div>
+        <div class="rrow"><div class="rname">보람상조피플</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span><span class="rtag rtag-e">생년월일</span></div></div>
+        <div class="rrow"><div class="rname">소노아임레디</div><div class="rtags"><span class="rtag rtag-r">성함</span><span class="rtag rtag-r">전화번호</span><span class="rtag rtag-r">주소</span><span class="rtag rtag-e">생년월일</span></div></div>
+        <div class="warnbox">⚠️ <strong>유버스/보람상조피플/소노아임레디</strong> 생년월일 필수<br>없이 접수 시 <strong>고객 연령 반드시 재확인</strong></div>
+      </div>
+    </div>
+
+    <button class="expand-btn" onclick="toggleAll()"><span id="ei">▲</span><span id="et">전체 단계 접기</span></button>
+
+    <div class="scard open" id="s1">
+      <div class="shead" onclick="tog('s1')"><div class="snum">1</div><div><div class="stitle">영업상담등록 클릭</div><div class="ssub">전산 접속 후 좌측 메뉴에서 선택</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산0.png')"><img src="https://a01059651000-creator.github.io/rentin/전산0.png" alt="STEP1"></div>
+        <p class="desc">전산 접속 후 좌측 메뉴에서 <strong>영업상담등록</strong>을 클릭합니다.<br>좌측에 <strong>수수료</strong>, <strong>비밀번호변경</strong> 메뉴도 확인할 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="scard open" id="s2">
+      <div class="shead" onclick="tog('s2')"><div class="snum">2</div><div><div class="stitle">우측 상단 [입력] 버튼 클릭</div><div class="ssub">노란색 입력 버튼으로 새 접수 시작</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산1.png')"><img src="https://a01059651000-creator.github.io/rentin/전산1.png" alt="STEP2"></div>
+        <p class="desc">우측 상단의 <em>노란색 [입력] 버튼</em>을 클릭하세요.<br>고객 정보 입력 팝업이 열립니다.</p>
+      </div>
+    </div>
+
+    <div class="scard open" id="s3">
+      <div class="shead" onclick="tog('s3')"><div class="snum">3</div><div><div class="stitle">고객 정보 입력</div><div class="ssub">성함, 전화번호, 주소 입력 후 메모 작성</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산2.png')"><img src="https://a01059651000-creator.github.io/rentin/전산2.png" alt="STEP3"></div>
+        <p class="desc"><strong>주문자 정보</strong>에 성함, 휴대폰 번호, 주소를 입력합니다.</p>
+        <div class="pbox">💬 <strong>고객메모</strong>: 고객 특이사항 기재<br>💬 <strong>설치메모</strong>: 해피콜 가능 시간 등 작성</div>
+      </div>
+    </div>
+
+    <div class="scard open" id="s4">
+      <div class="shead" onclick="tog('s4')"><div class="snum">4</div><div><div class="stitle">렌탈사 선택 및 모델 검색</div><div class="ssub">[찾기] → 모델 검색 → 더블클릭</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산3.png')"><img src="https://a01059651000-creator.github.io/rentin/전산3.png" alt="STEP4"></div>
+        <p class="desc"><strong>[찾기]</strong> 클릭 → 브랜드 선택 → 모델명 입력 → 조회<br><strong>개월수 및 렌탈료 확인 후 더블클릭</strong>하면 자동 입력됩니다.</p>
+      </div>
+    </div>
+
+    <div class="scard open" id="s5">
+      <div class="shead" onclick="tog('s5')"><div class="snum">5</div><div><div class="stitle">내용 확인 후 [저장]</div><div class="ssub">최종 정보 확인 후 저장 버튼 클릭</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산5저장.png')"><img src="https://a01059651000-creator.github.io/rentin/전산5저장.png" alt="STEP5"></div>
+        <p class="desc">입력 정보를 <strong>최종 확인</strong> 후 우측 하단 <em>[저장] 버튼</em>을 클릭합니다.</p>
+        <div class="tbox">✅ 저장 완료 후 본사에서 해피콜을 진행합니다.</div>
+      </div>
+    </div>
+
+    <div class="scard open" id="s6">
+      <div class="shead" onclick="tog('s6')"><div class="snum tip">!</div><div><div class="stitle">모델을 찾을 수 없을 때</div><div class="ssub">브랜드 '기타' → 설치메모에 직접 입력</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산4.png')"><img src="https://a01059651000-creator.github.io/rentin/전산4.png" alt="STEP6"></div>
+        <p class="desc"><strong>브랜드 '기타' 선택</strong> → <strong>[기타메모확인]</strong> 클릭 후 설치메모에 입력</p>
+        <div class="pbox">📝 <strong>렌탈사 / 모델명 / 개월수 / 렌탈료</strong><br>예) 스마트렌탈 / WRV07GWVWL / 60개월 / 29,900원</div>
+      </div>
+    </div>
+
+    <div class="scard open" id="s7">
+      <div class="shead" onclick="tog('s7')"><div class="snum">7</div><div><div class="stitle">진행 상태 확인</div><div class="ssub">[조회] 버튼으로 실시간 확인</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <p class="desc" style="margin-top:8px;"><strong>[조회]</strong> 버튼으로 현재 진행 상태를 확인할 수 있습니다.</p>
+        <div class="sgrid">
+          <div class="si"><span class="sb s1">진행중</span><div class="sdesc">해피콜 진행 전</div></div>
+          <div class="si"><span class="sb s2">승인완료</span><div class="sdesc">렌탈사 심사 승인</div></div>
+          <div class="si"><span class="sb s3">부재</span><div class="sdesc">고객 연락 안 됨</div></div>
+          <div class="si"><span class="sb s4">취소</span><div class="sdesc">부결 또는 고객 취소</div></div>
+          <div class="si"><span class="sb s5">설치완료</span><div class="sdesc">설치 완료</div></div>
+          <div class="si"><span class="sb s6">설치예정일</span><div class="sdesc">무시하셔도 됩니다</div></div>
+        </div>
+        <div class="warnbox" style="margin-top:10px;">
+          ⚠️ <strong>F등급 (헬로렌탈 전용)</strong><br>
+          신용점수는 문제없으나 <strong>알고리즘 부결</strong>입니다.<br>
+          과도한 신용조회 등이 원인 → <strong>다른 렌탈사로 재접수</strong> 시도하세요.
+        </div>
+      </div>
+    </div>
+
+    <div class="scard open" id="s8">
+      <div class="shead" onclick="tog('s8')"><div class="snum fee">₩</div><div><div class="stitle">수수료 확인</div><div class="ssub">PC 전용 · 설치완료일 기준 익월 말일 정산</div></div><div class="sarrow">▼</div></div>
+      <div class="sbody">
+        <div class="imgwrap" onclick="lb('https://a01059651000-creator.github.io/rentin/전산수수료.png')"><img src="https://a01059651000-creator.github.io/rentin/전산수수료.png" alt="수수료"></div>
+        <p class="desc">좌측 메뉴 <strong>수수료</strong> → 기간 설정 → <em>[조회]</em></p>
+        <div class="tbox">
+          💰 <strong>설치완료일 기준 익월 말일</strong> 계좌 입금<br>
+          📌 <strong>수수료 조회는 PC에서만 가능</strong> (모바일 불가)<br>
+          📊 수수료(예정) = 설치 전 / 수수료(확정) = 설치 후
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /page-wrap -->
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox">
+  <button class="lbclose" onclick="closeLb()">✕</button>
+  <div id="lbContainer" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+    <img id="lbimg" src="" alt="" style="max-width:100%;max-height:90vh;border-radius:8px;transform-origin:center;transition:transform .1s;user-select:none;">
+  </div>
+</div>
+
+<script>
+// ── 탭 전환 ──
+const tabMap = { home:0, calc:1, policy:2, admin:3, jeonsan:4 };
+function goTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function goTabById(id) {
+  const btns = document.querySelectorAll('.tab-btn');
+  goTab(id, btns[tabMap[id]]);
+}
+
+// ── 렌탈사 추천 계산기 ──
+const rentalCompanies = [
+  {
+    name: '이니렌탈',
+    icon: '🏢',
+    minAge: 20, maxAge: 79,
+    minScore: 710, scoreType: 'NICE',
+    noForeigner: true,
+    getLimit: (score) => {
+      if(score >= 840) return '약 1,500만원';
+      if(score >= 780) return '약 1,000만원';
+      return '약 600만원';
+    },
+    notes: '다이렉트 링크 작성(1차 승인) → 해피콜 / 동일제품 2개 불가 / 환수 없음',
+  },
+  {
+    name: 'LG 헬로렌탈',
+    icon: '📺',
+    minAge: 24, maxAge: 75,
+    minScore: 665, scoreType: 'NICE',
+    noForeigner: false,
+    foreignerNote: 'F-5(영주), F-6(결혼비자)만 가능',
+    getGrade: (score) => {
+      if(score >= 820) return { grade: 'Blue(1~3등급)', limit: '신용카드 1,100만/자동이체 360만', maxItems: 4 };
+      if(score >= 720) return { grade: 'Green(4~5등급)', limit: '신용카드 600만/자동이체 300만', maxItems: 2 };
+      if(score >= 665) return { grade: 'Yellow(6등급)', limit: '신용카드 400만/자동이체 180만 (일부품목만)', maxItems: 2 };
+      return null;
+    },
+    fGradeWarning: true,
+    notes: 'F코드 발생 시 6개월간 재접수 불가 / 신용카드 사용 시 한도 상승 / 환수 없음',
+  },
+  {
+    name: '스마트렌탈',
+    icon: '📱',
+    minAge: 24, maxAge: 68,
+    minScore: 710, scoreType: 'NICE',
+    noForeigner: true,
+    getLimit: (score) => {
+      if(score >= 820) return '최대 1,000만원 (1~4등급)';
+      if(score >= 710) return '최대 700만원 (5~6등급)';
+      return '최대 500만원 (7등급, 예외승인 가능)';
+    },
+    notes: '선접수 취소 후 5영업일 후 재접수 / 중도해지 시 잔여 렌탈료 전액 납부 / 환수 없음',
+  },
+  {
+    name: '현대 유버스',
+    icon: '🚌',
+    minAge: 24, maxAge: 70,
+    minScore: 750, scoreType: 'NICE',
+    noForeigner: false,
+    foreignerNote: 'F-2·F-4·F-5·F-6 가능 (최대 600만원, 1대)',
+    notes: '승인 후 신분증 앞뒷면 유버스 전송 필수 / 12회차 이내 해지 시 환수 / 선접수 취소 후 7일',
+  },
+  {
+    name: '소노아임레디',
+    icon: '✨',
+    minAge: 20, maxAge: 74,
+    minScore: 636, scoreType: 'KCB',
+    noForeigner: true,
+    notes: 'KCB+BS 알고리즘 심사 / 체크·신용카드만 가능 / 출금 2회(당일 가전+익일 상조) / 13회차 이후 환수 없음',
+  },
+  {
+    name: '보람상조피플',
+    icon: '🌸',
+    minAge: 25, maxAge: 70,
+    minScore: 750, scoreType: 'NICE',
+    noForeigner: true,
+    notes: '유버스에서 심사 / 본인집 주소 확인 서류 필요 / 출금 2회(당일 가전+익일 상조) / 환수 없음',
+  },
+];
+
+function calcRental() {
+  const age = parseInt(document.getElementById('inputAge').value);
+  const score = parseInt(document.getElementById('inputScore').value);
+  if (!age || !score || isNaN(age) || isNaN(score)) { alert('나이와 신용점수를 모두 입력해 주세요.'); return; }
+  if (age < 1 || age > 99) { alert('올바른 나이를 입력해 주세요.'); return; }
+  if (score < 0 || score > 1000) { alert('올바른 신용점수를 입력해 주세요.'); return; }
+  document.getElementById('inputSummary').textContent = `만 ${age}세 · 신용점수 ${score}점`;
+
+  let html = '';
+  rentalCompanies.forEach(c => {
+    const ageOk = age >= c.minAge && age <= c.maxAge;
+    const scoreOk = score >= c.minScore;
+    const isOk = ageOk && scoreOk;
+    const isWarn = isOk && c.fGradeWarning;
+    const cls = isWarn ? 'warn' : (isOk ? 'ok' : 'ng');
+    const tagText = isWarn ? '조건부 가능' : (isOk ? '가입 가능' : '가입 불가');
+    const statusIcon = isWarn ? '⚠️' : (isOk ? '✅' : '❌');
+    const statusCls = isWarn ? 'status-warn' : (isOk ? 'status-ok' : 'status-ng');
+
+    // 한도 정보
+    let limitInfo = '';
+    if(isOk && c.getLimit) limitInfo = `<div class="result-detail-row"><span class="detail-icon detail-ok">💰</span><span>예상 한도: ${c.getLimit(score)}</span></div>`;
+    if(isOk && c.getGrade) {
+      const g = c.getGrade(score);
+      if(g) limitInfo = `<div class="result-detail-row"><span class="detail-icon detail-ok">💰</span><span>${g.grade} / ${g.limit} / 최대 ${g.maxItems}대</span></div>`;
+    }
+
+    html += `<div class="rental-result">
+      <div class="rental-result-header ${cls}">
+        <div class="result-status ${statusCls}">${statusIcon}</div>
+        <div class="result-name ${cls}">${c.icon} ${c.name}</div>
+        <span class="result-tag tag-${cls}">${tagText}</span>
+      </div>
+      <div class="result-detail">
+        <div class="result-detail-row"><span class="detail-icon ${ageOk?'detail-ok':'detail-ng'}">${ageOk?'✓':'✗'}</span><span>나이: ${c.minAge}~${c.maxAge}세 → 만 ${age}세 ${ageOk?'충족':'미충족'}</span></div>
+        <div class="result-detail-row"><span class="detail-icon ${scoreOk?'detail-ok':'detail-ng'}">${scoreOk?'✓':'✗'}</span><span>${c.scoreType} ${c.minScore > 0 ? c.minScore+'점 이상' : '기준 없음'} → ${score}점 ${scoreOk?'충족':'미충족'}</span></div>
+        ${limitInfo}
+        ${c.fGradeWarning?`<div class="result-detail-row"><span class="detail-icon detail-warn">⚠</span><span>과도한 신용조회 시 알고리즘 부결(F등급) 가능</span></div>`:''}
+        ${c.noForeigner?'':`<div class="result-detail-row"><span class="detail-icon detail-ok">🌏</span><span>외국인 가능 (${c.foreignerNote||'조건 확인 필요'})</span></div>`}
+        <div class="result-detail-row"><span class="detail-icon" style="color:#94a3b8;">📌</span><span style="color:#94a3b8;">${c.notes}</span></div>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('resultList').innerHTML = html;
+  document.getElementById('resultWrap').classList.add('show');
+  document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetCalc() {
+  document.getElementById('inputAge').value = '';
+  document.getElementById('inputScore').value = '';
+  document.getElementById('resultWrap').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── 아코디언 ──
+function tog(id) { document.getElementById(id).classList.toggle('open'); }
+let allOpen = true;
+function toggleAll() {
+  allOpen = !allOpen;
+  document.querySelectorAll('.scard').forEach(c => allOpen ? c.classList.add('open') : c.classList.remove('open'));
+  document.getElementById('ei').textContent = allOpen ? '▲' : '▼';
+  document.getElementById('et').textContent = allOpen ? '전체 단계 접기' : '전체 단계 펼치기';
+}
+
+// ── 라이트박스 + 핀치줌 + 더블탭 확대 ──
+let lbScale = 1, lbLastDist = 0, lbLastTap = 0;
+let lbStartX = 0, lbStartY = 0, lbTransX = 0, lbTransY = 0, lbCurX = 0, lbCurY = 0;
+let isDragging = false;
+
+const lbImg = document.getElementById('lbimg');
+
+function lb(src) {
+  lbImg.src = src;
+  lbScale = 1; lbTransX = 0; lbTransY = 0;
+  lbImg.style.transform = 'scale(1) translate(0,0)';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLb(); });
+
+// 배경 클릭 시 닫기
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if(e.target === this) closeLb();
+});
+
+function applyTransform() {
+  lbImg.style.transform = `scale(${lbScale}) translate(${lbTransX/lbScale}px, ${lbTransY/lbScale}px)`;
+}
+
+// 핀치 줌
+lbImg.addEventListener('touchstart', function(e) {
+  if(e.touches.length === 2) {
+    lbLastDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  } else if(e.touches.length === 1) {
+    // 더블탭 감지
+    const now = Date.now();
+    if(now - lbLastTap < 300) {
+      // 더블탭 → 확대/원래대로 토글
+      if(lbScale > 1) {
+        lbScale = 1; lbTransX = 0; lbTransY = 0;
+      } else {
+        lbScale = 2.5;
+      }
+      applyTransform();
+      lbLastTap = 0;
+      return;
+    }
+    lbLastTap = now;
+    // 드래그 시작
+    isDragging = true;
+    lbStartX = e.touches[0].clientX - lbCurX;
+    lbStartY = e.touches[0].clientY - lbCurY;
+  }
+  e.stopPropagation();
+}, { passive: true });
+
+lbImg.addEventListener('touchmove', function(e) {
+  if(e.touches.length === 2) {
+    // 핀치 줌
+    const dist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    if(lbLastDist > 0) {
+      lbScale *= dist / lbLastDist;
+      lbScale = Math.min(Math.max(lbScale, 0.5), 5);
+      applyTransform();
+    }
+    lbLastDist = dist;
+  } else if(e.touches.length === 1 && isDragging && lbScale > 1) {
+    // 드래그 이동 (확대됐을 때만)
+    lbCurX = e.touches[0].clientX - lbStartX;
+    lbCurY = e.touches[0].clientY - lbStartY;
+    lbTransX = lbCurX;
+    lbTransY = lbCurY;
+    applyTransform();
+  }
+  e.preventDefault();
+}, { passive: false });
+
+lbImg.addEventListener('touchend', function(e) {
+  isDragging = false;
+  lbLastDist = 0;
+  // 1배 이하면 리셋
+  if(lbScale < 1) { lbScale = 1; lbTransX = 0; lbTransY = 0; lbCurX = 0; lbCurY = 0; applyTransform(); }
+}, { passive: true });
+</script>
+</body>
+</html>
