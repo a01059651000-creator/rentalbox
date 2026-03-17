@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 바로가기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg1:#0d0d1a;
+  --glass:rgba(255,255,255,0.04);
+  --glass2:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --accent:#818cf8;
+  --accent2:#c084fc;
+  --text:#f1f5f9;
+  --text2:#94a3b8;
+  --text3:#475569;
+  --red:#f87171;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg1);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.18;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,#6366f1,transparent);top:-100px;left:-100px;}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,#a855f7,transparent);bottom:-80px;right:-80px;}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,#06b6d4,transparent);top:40%;left:60%;}
+.main{position:relative;z-index:1;padding:32px 24px 80px;max-width:1280px;margin:0 auto;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:16px;}
+.clock-time{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-3px;line-height:1;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.clock-date{font-size:14px;color:var(--text3);margin-top:4px;font-weight:500;}
+.top-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.top-title{font-size:13px;font-weight:700;color:var(--text2);letter-spacing:2px;text-transform:uppercase;}
+.search-wrap{position:relative;width:280px;}
+.search-wrap input{width:100%;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border2);border-radius:50px;padding:11px 18px 11px 42px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:.2s;}
+.search-wrap input:focus{border-color:var(--accent);background:var(--glass2);}
+.search-wrap input::placeholder{color:var(--text3);}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text3);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.cat-card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .25s;position:relative;}
+.cat-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,transparent 50%);pointer-events:none;}
+.cat-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+.cat-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);}
+.cat-title-wrap{display:flex;align-items:center;gap:10px;}
+.cat-emoji{width:34px;height:34px;background:linear-gradient(135deg,rgba(129,140,248,0.2),rgba(192,132,252,0.2));border:1px solid rgba(129,140,248,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.cat-name{font-size:14px;font-weight:800;color:#fff;}
+.cat-count{font-size:11px;color:var(--text3);margin-top:1px;}
+.cat-actions{display:flex;gap:2px;opacity:0;transition:.2s;}
+.cat-card:hover .cat-actions{opacity:1;}
+.cat-btn{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:5px 7px;border-radius:7px;transition:.15s;}
+.cat-btn:hover{background:rgba(255,255,255,0.06);color:var(--text);}
+.cat-btn.del:hover{color:var(--red);}
+.drag-handle{cursor:grab;color:var(--text3);font-size:14px;padding:5px 4px;opacity:0.4;transition:.15s;}
+.drag-handle:hover{opacity:1;}
+.drag-handle:active{cursor:grabbing;}
+.bm-list{padding:8px 10px;}
+.bm-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;cursor:pointer;transition:.15s;text-decoration:none;}
+.bm-item:hover{background:rgba(255,255,255,0.06);}
+.bm-favicon{width:22px;height:22px;border-radius:6px;flex-shrink:0;object-fit:contain;background:rgba(255,255,255,0.06);}
+.bm-favicon-ph{width:22px;height:22px;border-radius:6px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:800;}
+.bm-info{flex:1;min-width:0;}
+.bm-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bm-url{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.bm-del{opacity:0;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:3px 6px;border-radius:6px;transition:.15s;flex-shrink:0;}
+.bm-item:hover .bm-del{opacity:1;}
+.bm-del:hover{color:var(--red);background:rgba(248,113,113,0.1);}
+.bm-add{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;cursor:pointer;color:var(--text3);font-size:13px;border:1px dashed rgba(255,255,255,0.08);margin:4px 10px 10px;transition:.2s;background:transparent;width:calc(100% - 20px);font-family:inherit;}
+.bm-add:hover{border-color:rgba(129,140,248,0.4);color:var(--accent);background:rgba(129,140,248,0.05);}
+.add-cat-card{background:rgba(255,255,255,0.02);backdrop-filter:blur(24px);border:1px dashed rgba(255,255,255,0.1);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:.25s;color:var(--text3);font-size:14px;font-family:inherit;min-height:140px;}
+.add-cat-card:hover{border-color:rgba(129,140,248,0.4);color:var(--accent);background:rgba(129,140,248,0.04);transform:translateY(-2px);}
+.add-cat-card .plus{width:40px;height:40px;border-radius:12px;background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--accent);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:rgba(18,18,42,0.95);backdrop-filter:blur(32px);border:1px solid var(--border2);border-radius:24px;padding:32px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,0.6);}
+.modal h3{font-size:17px;font-weight:800;color:#fff;margin-bottom:22px;}
+.mfield{margin-bottom:14px;}
+.mfield label{display:block;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase;}
+.mfield input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:.2s;}
+.mfield input:focus{border-color:var(--accent);}
+.mfield input::placeholder{color:var(--text3);}
+.mbtns{display:flex;gap:8px;margin-top:22px;}
+.btn-ok{flex:1;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;}
+.btn-ok:hover{opacity:.88;}
+.btn-cancel{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;padding:12px 20px;color:var(--text2);font-size:14px;font-family:inherit;cursor:pointer;}
+.empty-bm{padding:16px;text-align:center;font-size:12px;color:var(--text3);}
+.sortable-ghost{opacity:0.3;}
+.sortable-chosen{opacity:0.8;}
+@media(max-width:768px){
+  .main{padding:20px 14px 60px;}
+  .top-bar{flex-direction:column;align-items:flex-start;}
+  .top-right{align-items:flex-start;width:100%;}
+  .search-wrap{width:100%;}
+  .grid{grid-template-columns:1fr;}
+  .clock-time{font-size:52px;}
+  .cat-actions{opacity:1;}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div class="main">
+  <div class="top-bar">
+    <div class="clock-wrap">
+      <div class="clock-time" id="clockTime">00:00</div>
+      <div class="clock-date" id="clockDate"></div>
+    </div>
+    <div class="top-right">
+      <div class="top-title">🔖 내 바로가기</div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="검색..." oninput="renderAll()">
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- 카테고리 모달 -->
+<div class="modal-overlay" id="catModal">
+  <div class="modal">
+    <h3 id="catModalTitle">카테고리 추가</h3>
+    <div class="mfield"><label>이모지</label><input type="text" id="catEmoji" placeholder="🔖" maxlength="2"></div>
+    <div class="mfield"><label>이름</label><input type="text" id="catName" placeholder="카테고리 이름"></div>
+    <div class="mbtns">
+      <button class="btn-cancel" onclick="closeModal('catModal')">취소</button>
+      <button class="btn-ok" onclick="saveCat()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 북마크 모달 -->
+<div class="modal-overlay" id="bmModal">
+  <div class="modal">
+    <h3 id="bmModalTitle">북마크 추가</h3>
+    <div class="mfield"><label>사이트 이름</label><input type="text" id="bmName" placeholder="네이버"></div>
+    <div class="mfield"><label>URL</label><input type="text" id="bmUrl" placeholder="https://naver.com"></div>
+    <div class="mbtns">
+      <button class="btn-cancel" onclick="closeModal('bmModal')">취소</button>
+      <button class="btn-ok" onclick="saveBm()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let data = [];
+let editCatId = null;
+let editBmCatId = null;
+function uid(){ return Math.random().toString(36).slice(2,10); }
+
+const SB_URL = "https://nhyehgknkwwhebtprwzo.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oeWVoZ2tua3d3aGVidHByd3pvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODIyOTMsImV4cCI6MjA4OTE1ODI5M30.pfAcmyCDhSREXaIwlOy3RmqGfpmkBK1SiKN12ay8Ss0";
+
+// ✅ 이미진 전용 저장키 — 본인 main 과 절대 안 겹침
+const SAVE_ID = "main_secret";
+const LS_KEY  = "mybm_secret_v1";
+
+function defaultData(){
+  return [
+    { id:uid(), emoji:'⚡', name:'자주가는 사이트', bookmarks:[
+      {id:uid(),name:'네이버',url:'https://naver.com'},
+      {id:uid(),name:'구글',url:'https://google.com'},
+      {id:uid(),name:'유튜브',url:'https://youtube.com'},
+    ]},
+    { id:uid(), emoji:'📢', name:'광고관련', bookmarks:[
+      {id:uid(),name:'네이버 광고',url:'https://searchad.naver.com'},
+      {id:uid(),name:'당근 비즈니스',url:'https://business.daangn.com/login'},
+      {id:uid(),name:'구글애즈',url:'https://ads.google.com'},
+      {id:uid(),name:'메타광고',url:'https://adsmanager.facebook.com'},
+      {id:uid(),name:'카카오광고',url:'https://business.kakao.com'},
+    ]},
+    { id:uid(), emoji:'🛠️', name:'전산', bookmarks:[
+      {id:uid(),name:'렌트인전산',url:'http://rentdata.co.kr/'},
+    ]},
+  ];
+}
+
+async function load(){
+  try{
+    const res = await fetch(`${SB_URL}/rest/v1/bookmarks?id=eq.${SAVE_ID}`,{
+      headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+    });
+    const rows = await res.json();
+    if(rows && rows.length>0 && rows[0].data && rows[0].data.length>0){
+      data = rows[0].data;
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      renderAll(); return;
+    }
+  }catch(e){}
+
+  const s = localStorage.getItem(LS_KEY);
+  if(s){ try{ data=JSON.parse(s); renderAll(); return; }catch(e){} }
+
+  data = defaultData();
+  await save();
+  renderAll();
+}
+
+async function save(){
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+  try{
+    await fetch(`${SB_URL}/rest/v1/bookmarks`,{
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body: JSON.stringify({id: SAVE_ID, data, updated_at: new Date().toISOString()})
+    });
+  }catch(e){ console.log('Supabase 저장 실패, 로컬만 저장'); }
+}
+
+function getFavicon(url){
+  try{ const u=new URL(url); return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=32`; }
+  catch(e){ return null; }
+}
+
+function renderAll(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  data.forEach(cat => {
+    const bms = q ? cat.bookmarks.filter(b=>b.name.toLowerCase().includes(q)||b.url.toLowerCase().includes(q)) : cat.bookmarks;
+    if(q && bms.length===0) return;
+
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.setAttribute('data-id', cat.id);
+    card.innerHTML = `
+      <div class="cat-header">
+        <div class="cat-title-wrap">
+          <div class="cat-emoji">${cat.emoji||'🔖'}</div>
+          <div>
+            <div class="cat-name">${cat.name}</div>
+            <div class="cat-count">${cat.bookmarks.length}개</div>
+          </div>
+        </div>
+        <div class="cat-actions">
+          <span class="drag-handle cat-drag" title="드래그">⠿</span>
+          <button class="cat-btn" onclick="openEditCat('${cat.id}')">✏️</button>
+          <button class="cat-btn del" onclick="deleteCat('${cat.id}')">🗑️</button>
+        </div>
+      </div>
+      <div class="bm-list" id="bml-${cat.id}"></div>
+      <button class="bm-add" onclick="openAddBm('${cat.id}')">+ 북마크 추가</button>
+    `;
+    grid.appendChild(card);
+
+    const list = document.getElementById(`bml-${cat.id}`);
+    if(bms.length===0){
+      list.innerHTML='<div class="empty-bm">북마크가 없습니다</div>';
+    } else {
+      bms.forEach(bm=>{
+        const fav = getFavicon(bm.url);
+        const a = document.createElement('a');
+        a.className='bm-item';
+        a.setAttribute('data-id', bm.id);
+        a.href=bm.url; a.target='_blank'; a.rel='noopener';
+        a.innerHTML=`
+          ${fav?`<img class="bm-favicon" src="${fav}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
+          <div class="bm-favicon-ph" style="${fav?'display:none':''}">${bm.name[0]}</div>
+          <div class="bm-info">
+            <div class="bm-name">${bm.name}</div>
+            <div class="bm-url">${bm.url}</div>
+          </div>
+          <button class="bm-del" onclick="event.preventDefault();event.stopPropagation();deleteBm('${cat.id}','${bm.id}')">✕</button>
+        `;
+        list.appendChild(a);
+      });
+    }
+  });
+
+  // Sortable - 카테고리
+  new Sortable(grid,{
+    handle:'.cat-drag', animation:150,
+    ghostClass:'sortable-ghost', chosenClass:'sortable-chosen',
+    filter:'.add-cat-card',
+    onEnd: async function(){
+      const newOrder=[];
+      grid.querySelectorAll('.cat-card').forEach(card=>{
+        const cat=data.find(c=>c.id===card.getAttribute('data-id'));
+        if(cat) newOrder.push(cat);
+      });
+      data=newOrder; await save();
+    }
+  });
+
+  // Sortable - 북마크
+  data.forEach(cat=>{
+    const listEl=document.getElementById(`bml-${cat.id}`);
+    if(!listEl) return;
+    new Sortable(listEl,{
+      animation:150, ghostClass:'sortable-ghost',
+      onEnd: async function(){
+        const newOrder=[];
+        listEl.querySelectorAll('.bm-item').forEach(item=>{
+          const bm=cat.bookmarks.find(b=>b.id===item.getAttribute('data-id'));
+          if(bm) newOrder.push(bm);
+        });
+        cat.bookmarks=newOrder; await save();
+      }
+    });
+  });
+
+  // 카테고리 추가 버튼
+  const addCard = document.createElement('button');
+  addCard.className='add-cat-card';
+  addCard.innerHTML='<div class="plus">+</div><span>새 카테고리 추가</span>';
+  addCard.onclick=openAddCat;
+  grid.appendChild(addCard);
+}
+
+function openAddCat(){ editCatId=null; document.getElementById('catModalTitle').textContent='카테고리 추가'; document.getElementById('catEmoji').value=''; document.getElementById('catName').value=''; document.getElementById('catModal').classList.add('open'); setTimeout(()=>document.getElementById('catName').focus(),100); }
+function openEditCat(id){ editCatId=id; const cat=data.find(c=>c.id===id); document.getElementById('catModalTitle').textContent='카테고리 수정'; document.getElementById('catEmoji').value=cat.emoji||''; document.getElementById('catName').value=cat.name; document.getElementById('catModal').classList.add('open'); setTimeout(()=>document.getElementById('catName').focus(),100); }
+async function saveCat(){ const emoji=document.getElementById('catEmoji').value.trim()||'🔖'; const name=document.getElementById('catName').value.trim(); if(!name){alert('이름을 입력해주세요.');return;} if(editCatId){ const c=data.find(c=>c.id===editCatId); c.emoji=emoji; c.name=name; } else { data.push({id:uid(),emoji,name,bookmarks:[]}); } await save(); renderAll(); closeModal('catModal'); }
+async function deleteCat(id){ if(!confirm('카테고리를 삭제할까요?')) return; data=data.filter(c=>c.id!==id); await save(); renderAll(); }
+function openAddBm(catId){ editBmCatId=catId; document.getElementById('bmModalTitle').textContent='북마크 추가'; document.getElementById('bmName').value=''; document.getElementById('bmUrl').value=''; document.getElementById('bmModal').classList.add('open'); setTimeout(()=>document.getElementById('bmName').focus(),100); }
+async function saveBm(){ const name=document.getElementById('bmName').value.trim(); let url=document.getElementById('bmUrl').value.trim(); if(!name||!url){alert('이름과 URL을 입력해주세요.');return;} if(!url.startsWith('http')) url='https://'+url; data.find(c=>c.id===editBmCatId).bookmarks.push({id:uid(),name,url}); await save(); renderAll(); closeModal('bmModal'); }
+async function deleteBm(catId,bmId){ const cat=data.find(c=>c.id===catId); cat.bookmarks=cat.bookmarks.filter(b=>b.id!==bmId); await save(); renderAll(); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(el=>{ el.addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); }); });
+document.getElementById('catName').addEventListener('keydown',e=>{if(e.key==='Enter')saveCat();});
+document.getElementById('bmUrl').addEventListener('keydown',e=>{if(e.key==='Enter')saveBm();});
+
+// 시계
+function tick(){
+  const now=new Date();
+  document.getElementById('clockTime').textContent=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const days=['일','월','화','수','목','금','토'];
+  document.getElementById('clockDate').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
+}
+tick(); setInterval(tick,1000);
+
+load();
+</script>
+</body>
+</html>
